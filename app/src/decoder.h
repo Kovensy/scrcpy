@@ -1,31 +1,25 @@
-#ifndef DECODER_H
-#define DECODER_H
+#ifndef SC_DECODER_H
+#define SC_DECODER_H
 
-#include <stdbool.h>
-#include <libavformat/avformat.h>
+#include "common.h"
 
-#include "config.h"
+#include <libavcodec/avcodec.h>
 
-struct video_buffer;
+#include "trait/frame_source.h"
+#include "trait/packet_sink.h"
 
-struct decoder {
-    struct video_buffer *video_buffer;
-    AVCodecContext *codec_ctx;
+struct sc_decoder {
+    struct sc_packet_sink packet_sink; // packet sink trait
+    struct sc_frame_source frame_source; // frame source trait
+
+    const char *name; // must be statically allocated (e.g. a string literal)
+
+    AVCodecContext *ctx;
+    AVFrame *frame;
 };
 
+// The name must be statically allocated (e.g. a string literal)
 void
-decoder_init(struct decoder *decoder, struct video_buffer *vb);
-
-bool
-decoder_open(struct decoder *decoder, const AVCodec *codec);
-
-void
-decoder_close(struct decoder *decoder);
-
-bool
-decoder_push(struct decoder *decoder, const AVPacket *packet);
-
-void
-decoder_interrupt(struct decoder *decoder);
+sc_decoder_init(struct sc_decoder *decoder, const char *name);
 
 #endif

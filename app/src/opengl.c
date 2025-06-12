@@ -2,7 +2,8 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include "SDL2/SDL.h"
+#include <string.h>
+#include <SDL2/SDL.h>
 
 void
 sc_opengl_init(struct sc_opengl *gl) {
@@ -28,7 +29,7 @@ sc_opengl_init(struct sc_opengl *gl) {
                                sizeof(OPENGL_ES_PREFIX) - 1);
     if (gl->is_opengles) {
         /* skip the prefix */
-        version += sizeof(PREFIX) - 1;
+        version += sizeof(OPENGL_ES_PREFIX) - 1;
     }
 
     int r = sscanf(version, "%d.%d", &gl->version_major, &gl->version_minor);
